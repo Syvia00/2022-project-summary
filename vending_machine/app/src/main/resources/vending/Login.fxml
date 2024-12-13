@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane fx:id="LoginPage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vending.loginController">
+   <children>
+      <Text layoutX="180.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Login to Vending Machine">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Text>
+      <ListView id="ListProducts" fx:id="ListDrinks" layoutX="48.0" layoutY="107.0" prefHeight="93.0" prefWidth="128.0" />
+      <ListView id="ListProducts" fx:id="ListCandies" layoutX="188.0" layoutY="235.0" prefHeight="93.0" prefWidth="128.0" />
+      <ListView id="ListProducts" fx:id="ListChips" layoutX="48.0" layoutY="235.0" prefHeight="93.0" prefWidth="128.0" />
+      <ListView id="ListProducts" fx:id="ListChocolates" layoutX="188.0" layoutY="107.0" prefHeight="93.0" prefWidth="128.0" />
+      <Text layoutX="95.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Drinks" />
+      <Text layoutX="221.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chocolates" />
+      <Text layoutX="96.0" layoutY="221.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chips" />
+      <Text layoutX="230.0" layoutY="221.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Candies" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="250.0" layoutX="353.0" layoutY="109.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+      <PasswordField fx:id="Password" layoutX="373.0" layoutY="212.0" />
+      <Text layoutX="373.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+      <TextField fx:id="Username" layoutX="373.0" layoutY="154.0" />
+      <Text layoutX="373.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
+      <Button fx:id="Login" layoutX="477.0" layoutY="269.0" mnemonicParsing="false" onAction="#handleLoginButton" text="Login" />
+      <Button fx:id="create" layoutX="411.0" layoutY="270.0" mnemonicParsing="false" onAction="#handleCreateButton" text="Create" />
+      <Button fx:id="Anoymous" layoutX="411.0" layoutY="315.0" mnemonicParsing="false" onAction="#handleAnonyButton" text="Anonymous" />
+   </children>
+</Pane>
