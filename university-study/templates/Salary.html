@@ -1,0 +1,23 @@
+{% include 'top.html' %}
+    <div id="content">
+        <div id="container">
+            <h1 class="page-title"> Salary Report</h1>
+        <table class="pure-table">
+            <thead>
+                <tr><th>DeptID</th><th>MIN</th><th>MAX</th><th>AVERAGE</th></tr>
+            </thead>
+            <tbody>
+                {% for unit in units %}
+                        <tr>
+                            <td> {{unit[0]}}</td>
+                            <td> {{unit[1]}} </td>
+                            <td> {{unit[2]}} </td>
+                            <td> {{unit[3]}} </td>
+                        </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

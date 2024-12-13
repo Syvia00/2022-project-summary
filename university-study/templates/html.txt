@@ -1,0 +1,33 @@
+{% include 'top.html' %}
+<div id="content">
+    <div id="container">
+        <form class="pure-form pure-form-stacked login" method="POST" action="{{ url_for('search') }}">
+            <h2>Search Staff</h2>
+            <input type="text" name="depId" placeholder="depID" required>
+            <input class="pure-button pure-button-primary" type="submit">
+        </form>
+    </div>
+</div>
+</body>
+</html>
+
+{% include 'top.html' %}
+<div id="content">
+    <div id="container">
+        <h1 class="page-title">Search-Result</h1>
+        <table class="pure-table">
+            <thead><th>ID</th><th>Name</th>
+            </thead>
+            <tbody>
+                {% for unit in units %}
+                        <tr>
+                            <td> {{unit[0]}}</td>
+                            <td> {{unit[1]}} </td>
+                        </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{% include 'top.html' %}
+<div id="content">
+    <div id="container">
+        <form class="pure-form pure-form-stacked login" method="POST" action="{{ url_for('search') }}">
+            <h2>Search Staff</h2>
+            <input type="text" name="depId" placeholder="depID" required>
+            <input class="pure-button pure-button-primary" type="submit">
+        </form>
+    </div>
+</div>
+</body>
+</html>
