@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Tools.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">app</a> &gt; <a href="index.source.html" class="el_package">Currency</a> &gt; <span class="el_source">Tools.java</span></div><h1>Tools.java</h1><pre class="source lang-java linenums">package Currency;
+
+//import org.junit.platform.commons.util.StringUtils;
+
+import java.awt.*;
+import java.text.*;
+import java.util.*;
+import java.io.*;
+
+
+<span class="fc" id="L11">public class Tools {</span>
+<span class="fc" id="L12">    public static ArrayList&lt;Currency&gt; Currencies = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L13">    public static ArrayList&lt;Currency&gt; PopularCurrencies = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L14">    public static String[] Popular = new String[4];</span>
+    public static Date date;
+<span class="fc" id="L16">    public static int checkAdmin = 0;</span>
+
+    public static void UpdateTable(String[] currency){
+<span class="fc" id="L19">        int count = 4;</span>
+<span class="fc bfc" id="L20" title="All 2 branches covered.">        for (String str: currency){</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">            for (Currency c: Currencies) {</span>
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">                if (c.currency.equals(currency)) {</span>
+<span class="nc" id="L23">                    count--;</span>
+                }
+<span class="fc" id="L25">            }</span>
+        }
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        if (count == 0 ){</span>
+<span class="nc" id="L28">            Popular[0] = currency[0];</span>
+<span class="nc" id="L29">            Popular[1] = currency[1];</span>
+<span class="nc" id="L30">            Popular[2] = currency[2];</span>
+<span class="nc" id="L31">            Popular[3] = currency[3];</span>
+<span class="nc" id="L32">            System.out.println(&quot;Success Update Table.&quot;);</span>
+        }
+        else{
+<span class="fc" id="L35">            System.out.println(&quot;Failed update table.&quot;);</span>
+        }
+<span class="fc" id="L37">    }</span>
+
+
+    public static void AddNewRate(String currency, Double rate, Date date){
+<span class="fc" id="L41">        int checkExist = 0;</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (currency.equals(&quot;AUD&quot;)){</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">            for (Currency c: Currencies){</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">                if (c.currency.equals(currency)) {</span>
+<span class="pc bpc" id="L45" title="1 of 4 branches missed.">                    if (c.getRateByDate(date)!= null &amp;&amp; c.getRateByDate(date).equals(rate)){</span>
+<span class="fc" id="L46">                        checkExist = 1;</span>
+                    }
+                    else{
+<span class="fc" id="L49">                        c.addNewRate(date, rate);</span>
+                    }
+                }
+<span class="fc" id="L52">            }</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">            if (checkExist == 0) {</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">                for (Currency c : Currencies) {</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                    if (!c.currency.equals(&quot;AUD&quot;)) {</span>
+<span class="nc" id="L56">                        double r = c.getCurrentRate() * rate;</span>
+<span class="nc" id="L57">                        c.addNewRate(date, r);</span>
+                    }
+<span class="nc" id="L59">                }</span>
+            }
+        }
+        else {
+<span class="fc" id="L63">            checkExist = 0;</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">            for (Currency c : Currencies) {</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">                if(c.currency.equals(currency)) {</span>
+<span class="pc bpc" id="L66" title="2 of 4 branches missed.">                    if (c.getRateByDate(date)!= null &amp;&amp; c.getRateByDate(date).equals(rate)){</span>
+<span class="nc" id="L67">                        checkExist = 1;</span>
+                    }
+                    else {
+<span class="fc" id="L70">                        c.addNewRate(date, rate);</span>
+                    }
+<span class="fc" id="L72">                    break;</span>
+                }
+<span class="fc" id="L74">            }</span>
+        }
+
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (checkExist == 0){</span>
+<span class="fc" id="L78">            System.out.println(String.format(&quot;Successful add new rate to %s&quot;,currency));</span>
+        }
+        else{
+<span class="fc" id="L81">            System.out.println(String.format(&quot;%s rate already exist&quot;,currency));</span>
+        }
+<span class="fc" id="L83">    }</span>
+
+    public static void AddNewCurrency(double rates,String currency,Date rawdate)  {
+<span class="fc" id="L86">        int count = 0;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        for (Currency c : Currencies) {//Traverse through the arraylist,if the currency name has a match in the arraylist, increment count by 1.</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            if (Objects.equals(c.currency, currency)) {</span>
+<span class="fc" id="L89">                count++;</span>
+            }
+<span class="fc" id="L91">        }</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (count == 0) {//We only add the new currency if it hasn't appeared in the arraylist,which count should be 0.</span>
+<span class="fc" id="L93">            Currency newCurrency = new Currency(currency, rates, rawdate);</span>
+<span class="fc" id="L94">            Currencies.remove(0);//Get rid of the old currecy as we only need 4 currencies at one time</span>
+<span class="fc" id="L95">            Currencies.add(newCurrency);</span>
+<span class="fc" id="L96">            System.out.println(String.format(&quot;Successful add new currency %s&quot;,currency));</span>
+        }
+<span class="fc" id="L98">    }</span>
+
+    public static ArrayList&lt;Double&gt; getRatelist(String currency, Date start, Date end) {
+<span class="fc" id="L101">        Currency c = null;</span>
+
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        for (Currency a : Currencies) {</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">            if (a.currency.equals(currency)) {</span>
+<span class="fc" id="L105">                c = a;</span>
+            }
+<span class="fc" id="L107">        }</span>
+
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (c != null) {</span>
+<span class="fc" id="L110">            ArrayList&lt;Double&gt; rateList = new ArrayList&lt;&gt;();</span>
+            // find the start rate
+<span class="fc" id="L112">            int dateIndex = 0;</span>
+<span class="fc" id="L113">            int endIndex = 0;</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">            for (Date d : c.dateList) {</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">                if (start.compareTo(d) == -1) {</span>
+<span class="fc" id="L116">                    break;</span>
+                }
+<span class="fc" id="L118">                dateIndex++;</span>
+<span class="fc" id="L119">            }</span>
+
+<span class="fc bfc" id="L121" title="All 2 branches covered.">            for (Date d : c.dateList) {</span>
+<span class="pc bpc" id="L122" title="1 of 2 branches missed.">                if (end.compareTo(d) == -1) {</span>
+<span class="nc" id="L123">                    break;</span>
+                }
+<span class="fc" id="L125">                endIndex++;</span>
+<span class="fc" id="L126">            }</span>
+
+<span class="fc bfc" id="L128" title="All 2 branches covered.">            for (int i = dateIndex; i &lt; endIndex; i++) {</span>
+<span class="fc" id="L129">                rateList.add(c.getRateByDate(c.dateList.get(dateIndex)));</span>
+            }
+<span class="fc" id="L131">            return rateList;</span>
+        } else {
+<span class="fc" id="L133">            System.out.println(&quot;Currency not found&quot;);</span>
+        }
+<span class="fc" id="L135">        return null;</span>
+    }
+
+    public static Double getAvg(ArrayList &lt;Double&gt; rList) {
+<span class="fc" id="L139">        Double sum = 0.0;</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        for (Double num : rList) {</span>
+<span class="fc" id="L141">            sum += num;</span>
+<span class="fc" id="L142">        }</span>
+<span class="fc" id="L143">        return sum / rList.size();</span>
+    }
+
+    public static Double getMedian(ArrayList &lt;Double&gt; rList) {
+        Double median;
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (rList.size() % 2 != 0) {</span>
+<span class="fc" id="L149">            median = rList.get(rList.size()/2);</span>
+        } else {
+<span class="nc" id="L151">            median = (rList.get(rList.size() / 2) + rList.get((rList.size() / 2) - 1)) / 2;</span>
+        }
+<span class="fc" id="L153">        return median;</span>
+    }
+
+    public static Double getMax(ArrayList &lt;Double&gt; rList) {
+<span class="fc" id="L157">        double max  = 0.0;</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        for (Double num : rList) {</span>
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">            if (max &lt; num) {</span>
+<span class="fc" id="L160">                max = num;</span>
+            }
+<span class="fc" id="L162">        }</span>
+<span class="fc" id="L163">        return max;</span>
+    }
+
+    public static Double getMin(ArrayList &lt;Double&gt; rList) {
+<span class="fc" id="L167">        Double min  = rList.get(0);</span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        for (Double num : rList) {</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">            if (min &gt; num) {</span>
+<span class="nc" id="L170">                min = num;</span>
+            }
+<span class="fc" id="L172">        }</span>
+<span class="fc" id="L173">        return min;</span>
+    }
+
+    public static Double getSD(ArrayList &lt;Double&gt; rList) {
+<span class="fc" id="L177">        double SD = 0.00;</span>
+<span class="fc" id="L178">        Double mean = getAvg(rList);</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        for (Double num : rList) {</span>
+<span class="fc" id="L180">            SD += Math.pow(num - mean, 2);</span>
+<span class="fc" id="L181">        }</span>
+<span class="fc" id="L182">        return Math.sqrt(SD / rList.size());</span>
+    }
+
+    @Generated
+    public static void printFunc(String currency, Date start, Date end, ArrayList &lt;Double&gt; rList, Double avg, Double median, Double max, Double min, Double SD) {
+        System.out.printf(&quot;Summary of %s between %s and %s: \n\tAll rates: \n\t\t &quot;, currency, start, end);
+        for (Double num : rList) {
+            System.out.printf(&quot;%,.2f &quot;, num);
+        }
+        System.out.printf(&quot;\n\tAverage: %,.2f\n\tMedian:  %,.2f\n\tMaximum: %,.2f\n\tMinimum: %,.2f\n\tStandard Deviation: %,.2f\n&quot;, avg, median, max, min, SD);
+    }
+
+    @Generated
+    public static void printSummary(String currencyA, String currencyB, Date start, Date end) {
+        // Summary of currencyA
+        ArrayList &lt;Double&gt; rateListA = Tools.getRatelist(currencyA, start, end);
+        Double avgA = Tools.getAvg(rateListA);
+        Double medianA = Tools.getMedian(rateListA);
+        Double maxA = Tools.getMax(rateListA);
+        Double minA = Tools.getMin(rateListA);
+        Double sdA = Tools.getSD(rateListA);
+
+        // Summary of currencyB
+        ArrayList &lt;Double&gt; rateListB = getRatelist(currencyA, start, end);
+        Double avgB = Tools.getAvg(rateListA);
+        Double medianB = Tools.getMedian(rateListA);
+        Double maxB = Tools.getMax(rateListA);
+        Double minB = Tools.getMin(rateListA);
+        Double sdB = Tools.getSD(rateListA);
+
+        printFunc(currencyA, start, end, rateListA, avgA, medianA, maxA, minA, sdA);
+        System.out.println();
+        printFunc(currencyB, start, end, rateListB, avgB, medianB, maxB, minB, sdB);
+    }
+
+    public static void loadCurrencies(String filename){
+        try{
+<span class="fc" id="L219">            File file = new File(filename);</span>
+<span class="fc" id="L220">            Scanner scanner = new Scanner(file);</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">            while (scanner.hasNextLine()){</span>
+<span class="fc" id="L222">                String line = scanner.nextLine();</span>
+<span class="fc" id="L223">                String[] StringArray = line.split(&quot;,&quot;);</span>
+<span class="pc bpc" id="L224" title="1 of 2 branches missed.">                if (StringArray.length != 3){</span>
+<span class="nc" id="L225">                    System.out.println(&quot;Invalid currency format. The program will continue.&quot;);</span>
+<span class="nc" id="L226">                    continue;</span>
+                }
+                else{
+                    try{
+<span class="fc" id="L230">                        String name = StringArray[0];</span>
+<span class="fc" id="L231">                        Double rate = Double.parseDouble(StringArray[1]);</span>
+<span class="fc" id="L232">                        date = new SimpleDateFormat(&quot;dd/MM/yyyy&quot;).parse(StringArray[2]);</span>
+<span class="fc" id="L233">                        Currency currency = new Currency(name, rate, date);</span>
+<span class="fc" id="L234">                        Tools.Currencies.add(currency);</span>
+                    }
+<span class="nc" id="L236">                    catch (Exception e){</span>
+<span class="nc" id="L237">                        System.out.println(&quot;Invalid currency details. The program will continue.&quot;);</span>
+<span class="nc" id="L238">                        continue;</span>
+<span class="fc" id="L239">                    }</span>
+                }
+                
+<span class="fc" id="L242">            }</span>
+        }
+<span class="fc" id="L244">        catch (FileNotFoundException e){</span>
+<span class="fc" id="L245">            System.out.println(&quot;File does not exist.&quot;);</span>
+<span class="fc" id="L246">            e.printStackTrace();</span>
+<span class="fc" id="L247">        }</span>
+<span class="fc" id="L248">    }</span>
+
+    public static Double convert(Double amount, String inputName, String outputName){
+<span class="fc" id="L251">        Currency inputCurrency = null;</span>
+<span class="fc" id="L252">        Currency outputCurrency = null;</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">        for (Currency currency: Tools.Currencies){</span>
+<span class="fc bfc" id="L254" title="All 2 branches covered.">            if (inputName.equals(currency.currency)){</span>
+<span class="fc" id="L255">                inputCurrency = currency;</span>
+            }
+<span class="fc bfc" id="L257" title="All 2 branches covered.">            else if (outputName.equals(currency.currency)){</span>
+<span class="fc" id="L258">                outputCurrency = currency;</span>
+            }
+<span class="fc" id="L260">        }</span>
+<span class="fc bfc" id="L261" title="All 4 branches covered.">        if (inputCurrency == null || outputCurrency == null){</span>
+<span class="fc" id="L262">            System.out.println(&quot;At least one currency doesn't exist. Exiting.&quot;);</span>
+<span class="fc" id="L263">            return 0.0;</span>
+        }
+        else{
+<span class="fc" id="L266">            Double rate = outputCurrency.currentRate / inputCurrency.currentRate;</span>
+<span class="fc" id="L267">            Double outputAmount = amount * rate;</span>
+<span class="fc" id="L268">            System.out.println(String.format(&quot;You have converted %.2f %s to %.2f %s&quot;, amount, inputName, outputAmount, outputName));</span>
+<span class="fc" id="L269">            return outputAmount;</span>
+        }
+    }
+
+
+    public static void check(int position) {
+        //String empty = &quot; &quot;;
+<span class="nc" id="L276">        String sameCurr = &quot;-&quot;;</span>
+<span class="nc" id="L277">        StringBuilder output = new StringBuilder();</span>
+<span class="nc" id="L278">        Currency curr = PopularCurrencies.get(position);</span>
+
+<span class="nc bnc" id="L280" title="All 2 branches missed.">        for (Currency popular : PopularCurrencies) {</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">            if (Objects.equals(curr, popular)) {</span>
+<span class="nc" id="L282">                output.append(sameCurr);</span>
+            }
+            else {
+                // output of the change of currency rate are wrong
+<span class="nc" id="L286">                double rateChange = curr.getComparison();</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">                if (rateChange != 0.0) {</span>
+                    //double changeBetweenCurr =
+<span class="nc" id="L289">                    output.append(rateChange);</span>
+<span class="nc bnc" id="L290" title="All 2 branches missed.">                    if (rateChange &gt; 1) {</span>
+<span class="nc" id="L291">                        System.out.println(&quot;c&quot;);</span>
+<span class="nc" id="L292">                        output.append(&quot;(I)&quot;);</span>
+                    }
+<span class="nc bnc" id="L294" title="All 2 branches missed.">                    else if (rateChange &lt; 1) {</span>
+<span class="nc" id="L295">                        output.append(&quot;(D)&quot;);</span>
+                    }
+                }
+                else {
+<span class="nc" id="L299">                    output.append(popular.currentRate);  // something wrong here, can not output the unchanged current rate</span>
+                }
+            }
+<span class="nc" id="L302">            output.append(&quot;          &quot;);</span>
+<span class="nc" id="L303">        }</span>
+<span class="nc" id="L304">        System.out.println(output);</span>
+<span class="nc" id="L305">    }</span>
+    public static void displayTable() {
+<span class="nc" id="L307">        String start = &quot;From/To&quot;;</span>
+<span class="nc" id="L308">        System.out.format(&quot;%-16s %-16s %-16s %-16s %-16s\n&quot;, start, Popular[0], Popular[1], Popular[2], Popular[3]);</span>
+<span class="nc bnc" id="L309" title="All 2 branches missed.">        for (int i = 0; i &lt; 4; i++) {</span>
+<span class="nc" id="L310">            String current = Popular[i];</span>
+            // match the popular currency to the Currency, assume the input popular currencies are valid
+<span class="nc bnc" id="L312" title="All 2 branches missed.">            for (Currency cry : Currencies) {</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">                if (current.equals(cry.currency)) {</span>
+<span class="nc" id="L314">                    PopularCurrencies.add(i, cry);</span>
+                    //System.out.println(PopularCurrencies);
+<span class="nc" id="L316">                    System.out.format(&quot;%-16s&quot;,Popular[i]);</span>
+<span class="nc" id="L317">                    check(i);</span>
+                }
+<span class="nc" id="L319">            }</span>
+        }
+<span class="nc" id="L321">    }</span>
+
+
+    @Generated
+    public static void main(String[] args) throws ParseException {
+
+        // read file to database
+        Tools.loadCurrencies(&quot;src/main/resource/Database.txt&quot;);
+
+        // init popular table
+        Popular[0] = Currencies.get(0).getCurrency();
+        Popular[1] = Currencies.get(1).getCurrency();
+        Popular[2] = Currencies.get(2).getCurrency();
+        Popular[3] = Currencies.get(3).getCurrency();
+
+        // simple interface for user
+        Scanner scan = new Scanner(System.in);
+        System.out.println(&quot;Start for currency tools&quot;);
+
+        // user login
+        System.out.println(&quot;Do you want to login as Admin User or Normal User(Admin/Normal)&quot;);
+
+        int checklogin = 0;
+        while (scan.hasNextLine()) {
+            String user = scan.nextLine();
+            if (user.equals(&quot;Admin&quot;)) {
+                checkAdmin = 1;
+                checklogin = 1;
+                break;
+
+            } else if (user.equals(&quot;Normal&quot;)) {
+                checkAdmin = 0;
+                checklogin = 1;
+                break;
+            } else {
+                System.out.println(&quot;Do you want to login as Admin User or Normal User(Admin/Normal)&quot;);
+            }
+        }
+        if (checklogin == 1) {
+            System.out.print(&quot;Welcome to Currency Tools, You can using following Tools(You can using QUIT to quit this application) :&quot;);
+            if (checkAdmin == 1) {
+                System.out.println(&quot;Convert, Display Popular, Summary, Update Popular, Add Currency, Add Rate&quot;);
+            } else if (checkAdmin == 0) {
+                System.out.println(&quot;Convert, Display Popular, Summary&quot;);
+            }
+
+            while (scan.hasNextLine()) {
+                String s = scan.nextLine();
+                // quit application
+                if (s.equals(&quot;QUIT&quot;)) {
+                    break;
+                } else if (s.equals(&quot;Add Rate&quot;) &amp;&amp; checkAdmin == 1) {
+                    System.out.println(&quot;Please input currency: &quot;);
+                    String a = scan.nextLine();
+                    System.out.println(&quot;Please input rate: (two decimal)&quot;);
+                    String b = scan.nextLine();
+                    Double num = Double.parseDouble(b);
+                    System.out.println(&quot;Please input date:(dd/MM/yyyy)&quot;);
+                    String c = scan.nextLine();
+                    Date date1 = new SimpleDateFormat(&quot;dd/MM/yyyy&quot;).parse(c);
+                    Tools.AddNewRate(a, num, date1);
+                } else if (s.equals(&quot;Update Popular&quot;) &amp;&amp; checkAdmin == 1) {
+                    String[] update = new String[4];
+                    System.out.println(&quot;Please input first currency: &quot;);
+                    String a = scan.nextLine();
+                    update[0] = a;
+                    System.out.println(&quot;Please input second currency: &quot;);
+                    String b = scan.nextLine();
+                    update[1] = b;
+                    System.out.println(&quot;Please input third currency: &quot;);
+                    String c = scan.nextLine();
+                    update[2] = c;
+                    System.out.println(&quot;Please input forth currency: &quot;);
+                    String d = scan.nextLine();
+                    update[3] = d;
+                    Tools.UpdateTable(update);
+                } else if (s.equals(&quot;Convert&quot;)) {
+                    System.out.println(&quot;Please input amount of money: &quot;);
+                    String a = scan.nextLine();
+                    Double na = Double.parseDouble(a);
+                    System.out.println(&quot;Please input input currency: &quot;);
+                    String b = scan.nextLine();
+                    System.out.println(&quot;Please input output currency: &quot;);
+                    String c = scan.nextLine();
+                    Tools.convert(na, b, c);
+                } else if (s.equals(&quot;Display Popular&quot;)) {
+                    Tools.displayTable();
+                } else if (s.equals(&quot;Summary&quot;)) {
+                    System.out.println(&quot;Please input first currency: &quot;);
+                    String a = scan.nextLine();
+                    System.out.println(&quot;Please input second currency: &quot;);
+                    String b = scan.nextLine();
+                    System.out.println(&quot;Please input start date:(dd/MM/yyyy)&quot;);
+                    String c = scan.nextLine();
+                    Date date2 = new SimpleDateFormat(&quot;dd/MM/yyyy&quot;).parse(c);
+                    System.out.println(&quot;Please input end date:(dd/MM/yyyy)&quot;);
+                    String d = scan.nextLine();
+                    Date date3 = new SimpleDateFormat(&quot;dd/MM/yyyy&quot;).parse(d);
+                    Tools.printSummary(a, b, date2, date3);
+                } else if (s.equals(&quot;Add Currency&quot;) &amp;&amp; checkAdmin == 1) {
+                    System.out.println(&quot;Please input currency: &quot;);
+                    String a = scan.nextLine();
+                    System.out.println(&quot;Please input rate: &quot;);
+                    String b = scan.nextLine();
+                    Double nb = Double.parseDouble(b);
+                    System.out.println(&quot;Please input date:(dd/MM/yyyy)&quot;);
+                    String c = scan.nextLine();
+                    Date date4 = new SimpleDateFormat(&quot;dd/MM/yyyy&quot;).parse(c);
+                    Tools.AddNewCurrency(nb, a, date4);
+                }
+                else{
+                    System.out.println(&quot;Please input valid command&quot;);
+                }
+
+                System.out.println(&quot;Do you want to continue or quit the application?(QUIT for exit; Tools Name for continue)&quot;);
+                if (checkAdmin == 1) {
+                    System.out.println(&quot;Convert, Display Popular, Summary, Update Popular, Add Currency, Add Rate&quot;);
+                } else if (checkAdmin == 0) {
+                    System.out.println(&quot;Convert, Display Popular, Summary&quot;);
+                }
+            }
+        }
+
+        System.out.print(&quot;Bye!&quot;);
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
